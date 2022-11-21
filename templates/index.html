@@ -38,13 +38,13 @@
         #loggedin {
             background-color: {{ colors[1] }};
             color: {{ colors[2] }};
-            border: 2px solid {{ colors[0] }};
+            border: 3px solid {{ colors[0] }};
         }
     </style>
 </head>
 <body>
     {% if username == 'Guest' %}
-        <p class="username"><strong><div class="pfp" style="background-color: #d6d6d6; color: black; border: 2px solid black;"><p class="letter">G</p></div></strong>Guest<br><br><a href="login">Log In</a>
+        <p class="username"><strong><div class="pfp" style="background-color: #d6d6d6; color: black; border: 3px solid rgb(98, 98, 98);"><p class="letter">G</p></div></strong>Guest<br><br><a href="login">Log In</a>
         <p><a href="signup">Sign Up</a></p>
     {% else %}
         <p class="username"><strong><div class="pfp" id="loggedin"><p class="letter">{{ username[0].upper() }}</p></div></strong>{{ username }}
