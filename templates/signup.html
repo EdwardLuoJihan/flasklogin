@@ -9,7 +9,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
     * {
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Montserrat';
         transition: all 0.2s ease;
     }
 
@@ -47,7 +47,7 @@
         text-align: center;
         justify-content: center;
         margin: auto;
-        margin-top: 13%;
+        margin-top: 11%;
     }
 
     a {
@@ -67,6 +67,10 @@
     .checktext {
       margin-top: 3px;
       font-size: 15px;
+    }
+    select {
+      outline: none;
+
     }
   </style>
 </head>
@@ -93,6 +97,13 @@
       <input class="check" type="checkbox" onclick="myFunction()"><span class="checktext">Show Password</span>
       <br>
       <br>
+      <label for="cars">What are you?</label>
+<br><br>
+<select name="type" id="cars">
+  <option value="Student">Student</option>
+  <option value="Tutor">Tutor</option>
+</select>
+<br><br>
     <input class="btn btn-default" type="submit" value="Sign Up">
     {% if error %}
     <p class="error"><strong>Error:</strong> {{ error }}

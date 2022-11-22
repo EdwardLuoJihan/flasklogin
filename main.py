@@ -18,6 +18,15 @@ COLORS = [
     ['#AD8621', '#6B5621', '#E0AD2B'],
 ]
 
+def render():
+    f = open('users.json')
+    users = json.load(f)
+    display = ""
+    for user in users:
+        colors = users[user]['c']
+        display += f"""<div class='userrow'><div class='pfp' style='background-color: { colors[1] }; color: { colors[2] }; border: 2px solid { colors[0] };' id='loggedin'><p class='letter'>{user[0].upper()}</p></div><p class='un' style='display: inline-block; padding-left: 10px;'>{user} | {users[user]['name']} | {users[user]['t']} Account</p><a id='delete' onclick='rem(""" + '"' + user + '"' + """)' style='cursor:pointer;'>Delete</a></div><br><br>"""
+    return display
+
 @app.before_request
 def make_session_permanent():
     session.permanent = True
@@ -33,6 +42,34 @@ def index():
     except:
         return render_template('index.html', username="Guest", colors=['#d6d6d6','#d6d6d6','#d6d6d6'])
 
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    try:
+        f = open('users.json')
+        users = json.load(f)
+        if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
+            display = render()
+            return render_template('admin.html', users=display, n=len(users))
+    except:
+        return redirect(url_for('login'))
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    try:
+        f = open('users.json')
+        users = json.load(f)
+        if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
+            user = request.args.get('user')
+            display = ""
+            users.pop(user)
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+            display = render()
+            print(display)
+            return redirect(url_for('admin'))
+    except:
+        return redirect(url_for('index'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -41,12 +78,12 @@ def login():
         users = json.load(f)
         username = request.form['username']
         password = request.form['password']
-        if username in users and password == users[username]['p']:
+        if username == 'admin' and password == 'admin123':
+            session['username'] = {'u': username, 'p': password}
+            return redirect(url_for('admin'))
+        elif username in users and password == users[username]['p']:
             session['username'] = username
             return redirect(url_for('index'))
-        elif username == 'admin' and username == 'admin':
-            session[username] = password
-            return redirect(url_for('admin'))
         error = "Invalid Credentials. Please try again."
     return render_template('login.html', error=error)
 
@@ -59,13 +96,14 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         name = request.form['name']
-        if username in users:
+        type = request.form.get('type')
+        if username in users or username.lower() == 'admin':
             error = "This username is taken, please try another."
         elif password == '' or username == '' or name == '':
             error = "Empty field(s)."
         else:
             color = random.choice(COLORS)
-            users[username] = {'name': name, 'p': password, 'c': color}
+            users[username] = {'name': name, 'p': password, 'c': color, 't': type}
             with open('users.json', 'w') as f:
                 json.dump(users, f)
             session['username'] = username
