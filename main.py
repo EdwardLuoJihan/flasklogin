@@ -89,6 +89,21 @@ def edit():
     except:
         return redirect(url_for('index'))
 
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    try:
+        f = open('users.json')
+        users = json.load(f)
+        f = open('default.json')
+        default = json.load(f)
+        if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
+            users = default
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+            return redirect(url_for('admin'))
+    except:
+        return redirect(url_for('index'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
