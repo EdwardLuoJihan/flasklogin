@@ -13,13 +13,14 @@
         }
         .pfp {
             border-radius: 50%;
-            height: 40px;
-            width: 40px;
+            height: 35px;
+            width: 35px;
             vertical-align: middle;
             text-align: center;
             position: relative;
             user-select: none;
             display: inline-block;
+            margin: 5px 10px;
         }
         .un {
             font-size: 15px;
@@ -30,12 +31,45 @@
         }
         .letter {
             font-size: 25px;
-            line-height: 40px;
+            line-height:35px;
             padding: 0;
             margin: 0;
         }
         .userrow {
             display: inline-block;
+        }
+        .action-btn {
+            padding: 5px 15px;
+            color: white;
+            margin: 10px;
+            margin-right: 5px;
+        }
+        #delete:hover {
+            background-color: white;
+            color: rgb(255, 58, 58);
+        }
+        #delete {
+            border: 2px solid rgb(215, 38, 38);
+            background-color: rgb(255, 58, 58);;
+        }
+        #edit {
+            border: 2px solid rgb(38, 76, 215);
+            background-color: rgb(91, 58, 255);;
+        }
+        #edit:hover {
+            background-color: white;
+            color: rgb(91, 58, 255);;
+        }
+        table, th, td {
+            text-align: center;
+            border: 2px solid black;
+        }
+        
+        th {
+            padding: 5px 20px;
+        }
+        .noborder {
+            border: none;
         }
     </style>
 </head>
@@ -44,15 +78,30 @@
     {% if n != 0 %}
         <p class="count">{{ n }} Users</p>
         <br>
-        {{ users|safe }}
+        <table>
+            <tr>
+                <th class=""></th>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Account Type</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td class=""><div class='pfp' style='background-color: {{ users[user]["c"][1] }}; color: {{ users[user]["c"][2] }}; border: 2px solid {{ users[user]["c"][0] }};' id='loggedin'><p class='letter'>{{ user[0].upper() }}</p></div></td>
+                    <td>{{ user }}</td>
+                    <td>{{users[user]['name']}}</td>
+                    <td>{{users[user]['t']}}</td>
+                    <td><a id='edit' class="action-btn" onclick="edit('{{ user }}')" style='cursor:pointer;'>Edit</a><a id='delete' class="action-btn" onclick="rem('{{ user }}')" style='cursor:pointer;'>Delete</a></td>
+                </tr>
+            {% endfor %}
+        </table>
     {% else %}
         <h1>No users</h1>
     {% endif %}
     <script>
         function rem(user) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", `delete?user=${user}`, true);
-            xhr.send();
+            window.location = `/delete?user=${user}`
         }
     </script>
 </body>

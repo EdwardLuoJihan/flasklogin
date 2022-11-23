@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = 'thisisakey'
 
 COLORS = [
-    ['#DF7FD7', '#DF7FD7', '#591854'],
+    ['#DF7FD7', '#f2a9ec', '#591854'],
     ['#E3CAC8', '#DF8A82', '#5E3A37'],
     ['#E6845E', '#E05118', '#61230B'],
     ['#E0B050', '#E6CB97', '#614C23'],
@@ -49,11 +49,11 @@ def admin():
         users = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             display = render()
-            return render_template('admin.html', users=display, n=len(users))
+            return render_template('admin.html', users=users, n=len(users))
     except:
         return redirect(url_for('login'))
 
-@app.route('/delete', methods=['POST'])
+@app.route('/delete', methods=['GET', 'POST'])
 def delete():
     try:
         f = open('users.json')
@@ -64,8 +64,6 @@ def delete():
             users.pop(user)
             with open('users.json', 'w') as f:
                 json.dump(users, f)
-            display = render()
-            print(display)
             return redirect(url_for('admin'))
     except:
         return redirect(url_for('index'))
