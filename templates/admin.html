@@ -117,9 +117,14 @@
                     <td class=""><div class='pfp' style='background-color: {{ users[user]["c"][1] }}; color: {{ users[user]["c"][2] }}; border: 2px solid {{ users[user]["c"][0] }};' id='loggedin'><p class='letter'>{{ user[0].upper() }}</p></div></td>
                     <td><input class="username" id="{{user}}username" name="username" type="text" value="{{user}}"></td>
                     <td><input type="text" class="name" id="{{user}}name" name="name" value="{{users[user]['name']}}"></td>
-                    <td><select name="type" id="{{user}}type" value="{{users[user]['t']}}">
-                        <option value="Student">Student</option>
-                        <option value="Tutor">Tutor</option>
+                    <td><select name="type" id="{{user}}type">
+                        {% if users[user]['t'] == 'Student' %}
+                            <option selected value="Student">Student</option>
+                            <option value="Tutor">Tutor</option>
+                        {% else %}
+                            <option value="Student">Student</option>
+                            <option selected value="Tutor">Tutor</option>
+                        {% endif %}
                     </select></td>
                     <td><a id='edit' class="action-btn" onclick="edit('{{ user }}')" style='cursor:pointer;'>Edit</a><a id='delete' class="action-btn" onclick="rem('{{ user }}')" style='cursor:pointer;'>Delete</a></td>
                 </tr>

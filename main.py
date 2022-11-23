@@ -79,7 +79,6 @@ def edit():
             newname = request.args.get('newname')
             newtype = request.args.get('newtype')
             user = request.args.get('user')
-            print(newusername, newname, newtype, user)
             oldc = users[user]['c']
             oldp = users[user]['p']
             users = {newusername if k == user else k:v for k,v in users.items()}
