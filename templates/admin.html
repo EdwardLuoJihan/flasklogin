@@ -71,6 +71,29 @@
         .noborder {
             border: none;
         }
+        input {
+            outline: none;
+            border: none;
+            text-align: center;
+            
+        }
+        select {
+            border: none;
+            outline: none;
+            text-align: center;
+            border-radius: 0;
+            background-color: white;
+        }
+        option {
+            border: none;
+            outline: none;
+            border-radius: 0;
+            background-color: white;
+        }
+        select:active {
+            border-radius: 0;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -89,9 +112,12 @@
             {% for user in users %}
                 <tr>
                     <td class=""><div class='pfp' style='background-color: {{ users[user]["c"][1] }}; color: {{ users[user]["c"][2] }}; border: 2px solid {{ users[user]["c"][0] }};' id='loggedin'><p class='letter'>{{ user[0].upper() }}</p></div></td>
-                    <td>{{ user }}</td>
-                    <td>{{users[user]['name']}}</td>
-                    <td>{{users[user]['t']}}</td>
+                    <td><input class="username" id="{{user}}username" name="username" type="text" value="{{user}}"></td>
+                    <td><input type="text" class="name" id="{{user}}name" name="name" value="{{users[user]['name']}}"></td>
+                    <td><select name="type" id="{{user}}type" value="{{users[user]['t']}}">
+                        <option value="Student">Student</option>
+                        <option value="Tutor">Tutor</option>
+                    </select></td>
                     <td><a id='edit' class="action-btn" onclick="edit('{{ user }}')" style='cursor:pointer;'>Edit</a><a id='delete' class="action-btn" onclick="rem('{{ user }}')" style='cursor:pointer;'>Delete</a></td>
                 </tr>
             {% endfor %}
@@ -102,6 +128,12 @@
     <script>
         function rem(user) {
             window.location = `/delete?user=${user}`
+        }
+        function edit(user) {
+            username = document.getElementById(user+"username").value;
+            name = document.getElementById(user+"name").value;
+            type = document.getElementById(user+"type").value;
+            window.location = `/edit?user=${user}&newusername=${username}&newname=${name}&newtype=${type}`
         }
     </script>
 </body>

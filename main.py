@@ -68,6 +68,27 @@ def delete():
     except:
         return redirect(url_for('index'))
 
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    try:
+        f = open('users.json')
+        users = json.load(f)
+        if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
+            newusername = request.args.get('newusername')
+            newname = request.args.get('newname')
+            newtype = request.args.get('newtype')
+            user = request.args.get('user')
+            print(newusername, newname, newtype, user)
+            oldc = users[user]['c']
+            oldp = users[user]['p']
+            users = {newusername if k == user else k:v for k,v in users.items()}
+            users[newusername] = {'name': newname, 'p': oldp, 'c': oldc, 't': newtype}
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+            return redirect(url_for('admin'))
+    except:
+        return redirect(url_for('index'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
