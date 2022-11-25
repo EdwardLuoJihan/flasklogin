@@ -69,6 +69,9 @@
         th {
             padding: 5px 20px;
         }
+        table {
+            border: none;
+        }
         .noborder {
             border: none;
         }
@@ -101,10 +104,13 @@
 <body>
     <a href="reset">Reset users to default for testing purposes</a>
     <br>
+    <a href="add">Add test account</a>
+    <br>
+    <a href="delete-all">Delete all</a>
+    <br>
     <p><a href="signout">Sign Out</a></p>
     {% if n != 0 %}
         <p class="count">{{ n }} Users</p>
-        <br>
         <table>
             <tr>
                 <th class=""></th>
@@ -131,6 +137,7 @@
                 </tr>
             {% endfor %}
         </table>
+        <br>
     {% else %}
         <h1>No users</h1>
     {% endif %}

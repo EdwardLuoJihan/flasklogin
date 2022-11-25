@@ -20,7 +20,7 @@ COLORS = [
 ]
 
 def render():
-    f = open('users.json')
+    f = open('/home/inlowik/login/users.json')
     users = json.load(f)
     display = ""
     for user in users:
@@ -36,7 +36,7 @@ def make_session_permanent():
 @app.route('/')
 def index():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None:
             return render_template('index.html', username=session['username'], colors=users[session['username']]['c'])
@@ -46,7 +46,7 @@ def index():
 @app.route('/profile')
 def profile():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None:
             return render_template('profile.html', username=session['username'], colors=users[session['username']]['c'], users=users)
@@ -56,7 +56,7 @@ def profile():
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             display = render()
@@ -67,13 +67,13 @@ def admin():
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             user = request.args.get('user')
             display = ""
             users.pop(user)
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('admin'))
     except:
@@ -82,7 +82,7 @@ def delete():
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         newusername = request.args.get('newusername')
         newname = request.args.get('newname')
@@ -96,7 +96,7 @@ def edit():
             users = {newusername if k == user else k:v for k,v in users.items()}
             users[newusername] = {'name': newname, 'p': oldp, 'c':  [f"#{c0}", f"#{c1}", f"#{c2}"], 't': oldtype}
             session['username'] = newusername
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('profile'))
         elif session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
@@ -105,7 +105,7 @@ def edit():
             oldp = users[user]['p']
             users = {newusername if k == user else k:v for k,v in users.items()}
             users[newusername] = {'name': newname, 'p': oldp, 'c': oldc, 't': newtype}
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('admin'))
     except:
@@ -114,11 +114,11 @@ def edit():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             users[f"Test{len(users)+1}"] = {'name': f"Test Account{len(users)+1}", 'p': len(users), 'c': random.choice(COLORS), 't': 'Student'}
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('admin'))
     except:
@@ -127,13 +127,13 @@ def add():
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
-        f = open('default.json')
+        f = open('/home/inlowik/login/default.json')
         default = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             users = default
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('admin'))
     except:
@@ -142,11 +142,11 @@ def reset():
 @app.route('/delete-all', methods=['GET', 'POST'])
 def deleteall():
     try:
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         if session['username'] != None and session['username']['u'] == 'admin' and session['username']['p'] == 'admin123':
             users = {}
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             return redirect(url_for('admin'))
     except:
@@ -156,7 +156,7 @@ def deleteall():
 def login():
     error = None
     if request.method == 'POST':
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         username = request.form['username']
         password = request.form['password']
@@ -173,7 +173,7 @@ def login():
 def signup():
     error = None
     if request.method == 'POST':
-        f = open('users.json')
+        f = open('/home/inlowik/login/users.json')
         users = json.load(f)
         username = request.form['username']
         password = request.form['password']
@@ -186,7 +186,7 @@ def signup():
         else:
             color = random.choice(COLORS)
             users[username] = {'name': name, 'p': password, 'c': color, 't': type}
-            with open('users.json', 'w') as f:
+            with open('/home/inlowik/login/users.json', 'w') as f:
                 json.dump(users, f)
             session['username'] = username
             return redirect(url_for('index'))
@@ -196,5 +196,3 @@ def signup():
 def signout():
     session.pop('username', default=None)
     return redirect(url_for('index'))
-
-app.run()
